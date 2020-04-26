@@ -1,24 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
+import Navigation from './component/Navigation';
+import Logo from './component/Logo';
+import ImageLinkForm from './component/ImageLinkForm';
+import Rank from './component/Rank';
+import Particles from 'react-particles-js';
 import './App.css';
 
 function App() {
+  const particlesOptions={
+    particles: {
+      number:{
+        value:200,
+        density:{
+          enable:true,
+          value_area:800
+        }
+      }
+    },
+    interactivity:{
+      detect:'on',
+      events:{
+        onhover:{
+          enable:'true',
+          mode:'repulse'
+        }
+      }
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Particles className='particles'
+             params={particlesOptions}/>
+          <Navigation />
+          <Logo />
+          <Rank />
+          <ImageLinkForm />
     </div>
   );
 }
