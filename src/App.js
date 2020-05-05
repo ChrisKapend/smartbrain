@@ -45,7 +45,7 @@ class App extends Component{
   }
   onButtonSubmit = () =>{
     this.setState({imageUrl:this.state.input})
-
+    console.log(this.state.imageUrl)
     const app = new Clarifai.App({
       apiKey: '938d80760f2a459994bf563ad7a916bf'
      });
