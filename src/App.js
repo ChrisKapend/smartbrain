@@ -5,12 +5,20 @@ import ImageLinkForm from './component/ImageLinkForm';
 import Rank from './component/Rank';
 import Particles from 'react-particles-js';
 import './App.css';
-import Clarifai from 'clarifai';
 
-const app = new Clarifai.App({
-  apiKey:'938d80760f2a459994bf563ad7a916bf'
-})
+async function quickstart() {
+  // Imports the Google Cloud client library
+  const vision = require('@google-cloud/vision');
 
+  // Creates a client
+  const client = new vision.ImageAnnotatorClient();
+
+  // Performs label detection on the image file
+  const [result] = await client.labelDetection('../cat.jpg');
+  const labels = result.labelAnnotations;
+  console.log('Labels:');
+  labels.forEach(label => console.log(label.description));
+}
 
 const particlesOptions={
   particles: {
@@ -44,14 +52,10 @@ class App extends Component{
     console.log(event.target.value)
   }
   onButtonSubmit = () =>{
-    console.log('click')
-    app.models.initModel({id: Clarifai.GENERAL_MODEL, version: "aa7f35c01e0642fda5cf400f543e7c40"})
-      .then(generalModel => {
-        return generalModel.predict("@@sampleTrain");
-      })
-      .then(response => {
-        var concepts = response['outputs'][0]['data']['concepts']
-      })
+    console.log('click');
+    quickstart();
+    quickstart().catch(console.error)
+
   }
   render(){
     return(
