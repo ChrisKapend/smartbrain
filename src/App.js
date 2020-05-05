@@ -4,21 +4,11 @@ import Logo from './component/Logo';
 import ImageLinkForm from './component/ImageLinkForm';
 import Rank from './component/Rank';
 import Particles from 'react-particles-js';
+import FaceRecognition from './component/Facerecognition'
 import './App.css';
+import Clarifai from 'clarifai';
 
-async function quickstart() {
-  // Imports the Google Cloud client library
-  const vision = require('@google-cloud/vision');
 
-  // Creates a client
-  const client = new vision.ImageAnnotatorClient();
-
-  // Performs label detection on the image file
-  const [result] = await client.labelDetection('../cat.jpg');
-  const labels = result.labelAnnotations;
-  console.log('Labels:');
-  labels.forEach(label => console.log(label.description));
-}
 
 const particlesOptions={
   particles: {
@@ -45,17 +35,26 @@ class App extends Component{
   constructor(){
     super();
     this.state = {
-      input:''
+      input:'',
+      imageUrl:''
     }
   }
   onInputChange = (event) =>{
-    console.log(event.target.value)
+    this.setState({input:event.target.value});
+    console.log(event.target.value);
   }
   onButtonSubmit = () =>{
-    console.log('click');
-    quickstart();
-    quickstart().catch(console.error)
+    this.setState({imageUrl:this.state.input})
 
+    const app = new Clarifai.App({
+      apiKey: '938d80760f2a459994bf563ad7a916bf'
+     });
+     app.models.predict(Clarifai.COLOR_MODEL, this.state.imageUrl)
+     .then(response=>{
+       console.log(response);
+     }).catch(err=>{
+       console.log(err);
+     })
   }
   render(){
     return(
@@ -65,6 +64,7 @@ class App extends Component{
         <Logo />
         <Rank />
         <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
+        <FaceRecognition inputLink = {this.state.imageUrl}/>
       </div>
     )
   }
