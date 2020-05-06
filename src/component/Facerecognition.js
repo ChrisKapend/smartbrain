@@ -1,9 +1,10 @@
 import React from 'react';
 import './ImageLinkForm.css';
-const FaceRecognition = ({imageUrl}) =>{
+const FaceRecognition = (props) =>{
+    console.log(`the input link is ${props.imageUrl}`)
     return(
         <article>
-            <img src={imageUrl} alt={' '} style={{width:'700px'}}/>
+            <img src={props.imageUrl} alt={' '} style={{width:'700px'}}/>
         </article>
     )
 }
