@@ -1,11 +1,17 @@
 import React from 'react';
-import './ImageLinkForm.css';
-const FaceRecognition = (props) =>{
-    console.log(`the input link is ${props.imageUrl}`)
+import './FaceRecognition.css';
+const FaceRecognition = ({imageUrl, box}) =>{
+    const {leftCol, topRow, rightCol, bottomRow} = box;
+    console.log(box)
     return(
-        <article>
-            <img src={props.imageUrl} alt={' '} style={{width:'700px'}}/>
-        </article>
+        <section className='center'>
+            <section className={'imageContainer'}>
+                <img id={'srcImage'} src={imageUrl} alt={' '} style={{width:'700px'}}/>
+                <section className='faceBox' style={{top:box.topRow, left:box.leftCol, right:box.rightCol, bottom:box.bottomRow}}>
+               
+                </section>
+            </section>
+        </section>
     )
 }
 export default FaceRecognition;
