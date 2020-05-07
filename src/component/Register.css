@@ -1,0 +1,17 @@
+form{
+    width: 300px;
+}
+.mainContainer{
+    width: 40%;
+    margin: auto;
+    margin-top: 100px;
+}
+.inputField:focus{
+    background: black !important;
+    outline: solid 2px black !important;
+    color: white;
+}
+
+.inputfield:hover{
+    outline: none !important ;
+}
