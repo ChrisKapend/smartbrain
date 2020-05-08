@@ -15,3 +15,9 @@ form{
 .inputfield:hover{
     outline: none !important ;
 }
+
+p{
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+}

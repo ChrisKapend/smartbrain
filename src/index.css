@@ -3,7 +3,7 @@ body {
   font-family: 'Courier new' !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(89deg, rgb(31, 32, 31) 0%, rgb(116, 116, 101) 100%);
+  background: linear-gradient(89deg, rgb(38, 36, 36) 0%, rgba(116, 116, 101, .5) 100%);
 }
 
 code {
@@ -24,4 +24,8 @@ code {
   z-index: -1;
 }
 .App{
+}
+
+legend{
+  font-size: 50px !important;
 }
