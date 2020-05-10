@@ -5,8 +5,8 @@ import ImageLinkForm from './component/ImageLinkForm';
 import Rank from './component/Rank';
 import Particles from 'react-particles-js';
 import FaceRecognition from './component/FaceRecognition';
-import SignIn from'./component/SignIn';
-import Register from "./component/Register";
+import SignIn from './component/SignIn/SignIn';
+import Register from "./component/Register/Register";
 import './App.css';
 import Clarifai from 'clarifai';
 
@@ -43,12 +43,37 @@ class App extends Component{
       imageUrl:'',
       box:{},
       route:'signin',
-      isSignedIn:false
+      isSignedIn:false,
+      user:{
+        id: '',
+        name: '',
+        email: '',
+        joined: '',
+        entries: 0
+      }
     }
   }
+  loadUser = data =>{
+    this.setState({
+      user:{
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        joined: data.joined,
+        entries: data.entries
+      }
+    })
+  }
+  componentDidMount() {
+    fetch('http://localhost:4000')
+        .then(response =>response.json())
+        .then(console.log)
+  }
+
   //action taken when a user click on navigations links
   onRouteChange = (route) =>{
-    if (route === 'signout')
+    console.log(route)
+    if (route === 'signin')
       this.setState({isSignedIn:false})
     else if (route ==='home')
       this.setState({isSignedIn:true})
@@ -60,7 +85,8 @@ class App extends Component{
   }
   //locating the face on the picture
   faceLocation=(data)=>{
-    const face = data.region_info.bounding_box;
+    console.log(data);
+    const face = data.bounding_box;
     const image = document.getElementById('srcImage');
     const box ={
       width:Number(image.width),
@@ -79,17 +105,31 @@ class App extends Component{
   drawFace = (box) =>{
     this.setState({box:box});
   }
+  //.outputs[0].data.regions[0].region_info.bounding_box
   //action when the submit button is click call to the api for face detection
   onButtonSubmit = () =>{
     this.setState({imageUrl:this.state.input})
     const app = new Clarifai.App({
       apiKey: '938d80760f2a459994bf563ad7a916bf'
      });
-     app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrl)
-     .then(response=>{
-       response.rawData.outputs[0].data.regions.forEach(element => {
-         this.drawFace(this.faceLocation(element));
-       });
+     app.models
+         .predict(Clarifai.FACE_DETECT_MODEL, this.state.imageUrl)
+         .then(response=>{
+           console.log(response)
+           if(response){
+             fetch('http://localhost:4000/image',{
+               method:'put',
+               headers:{'Content-Type':'application/json'},
+               body:JSON.stringify({id:this.state.user.id})
+             })
+                 .then(response => response.json())
+                 .then(count => {
+                   console.log((`on button ${JSON.stringify(this.state.user)}`));
+                   this.setState(Object.assign(this.state.user, {entries: count}));
+                   console.log((`after on button ${JSON.stringify(this.state.user)}`));
+                 })
+           }
+           this.drawFace(this.faceLocation(response.outputs[0].data.regions[0].region_info));
      })
      .then({
      })
@@ -106,14 +146,14 @@ class App extends Component{
           this.state.route === 'home'
           ? <div>
                 <Logo />
-                <Rank />
+                <Rank name ={this.state.user.name} entries={this.state.user.entries}/>
                 <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
                 <FaceRecognition imageUrl = {this.state.imageUrl} box = {this.state.box}/>
               </div>
           : (
               this.state.route === 'signin'
-              ? <SignIn onRouteChange= { this.onRouteChange } />
-              : <Register onRouteChange={ this.onRouteChange }/>
+              ? <SignIn loadUser ={this.loadUser} onRouteChange= { this.onRouteChange } />
+              : <Register loadUser = {this.loadUser} onRouteChange={ this.onRouteChange }/>
               )
         }
       </div>

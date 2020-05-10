@@ -21,3 +21,14 @@ p{
     font-size: 15px;
     font-weight: bold;
 }
+#errorMessage{
+    margin: 5px;
+    color: red;
+    font-weight: 600;
+    padding: 5px;
+    font-size: 12px !important;
+    background: black;
+}
+.error{
+    display: none;
+}
