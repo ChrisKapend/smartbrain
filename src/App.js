@@ -33,25 +33,25 @@ const particlesOptions={
     }
   }
 }
-
+const initialState = {
+  input:'',
+  imageUrl:'',
+  box:{},
+  route:'signin',
+  isSignedIn:false,
+  user:{
+    id: '',
+    name: '',
+    email: '',
+    joined: '',
+    entries: 0
+  }
+}
 // state variables definitions
 class App extends Component{
   constructor(){
     super();
-    this.state = {
-      input:'',
-      imageUrl:'',
-      box:{},
-      route:'signin',
-      isSignedIn:false,
-      user:{
-        id: '',
-        name: '',
-        email: '',
-        joined: '',
-        entries: 0
-      }
-    }
+    this.state = initialState;
   }
   loadUser = data =>{
     this.setState({
@@ -64,17 +64,13 @@ class App extends Component{
       }
     })
   }
-  componentDidMount() {
-    fetch('http://localhost:4000')
-        .then(response =>response.json())
-        .then(console.log)
-  }
 
   //action taken when a user click on navigations links
   onRouteChange = (route) =>{
-    console.log(route)
-    if (route === 'signin')
-      this.setState({isSignedIn:false})
+    if (route === 'signin'){
+      this.setState(initialState)
+      document.getElementById('')
+    }
     else if (route ==='home')
       this.setState({isSignedIn:true})
     this.setState({route:route});
@@ -85,7 +81,6 @@ class App extends Component{
   }
   //locating the face on the picture
   faceLocation=(data)=>{
-    console.log(data);
     const face = data.bounding_box;
     const image = document.getElementById('srcImage');
     const box ={

@@ -26,12 +26,15 @@ class SignIn extends React.Component{
         })
             .then(response => response.json())
             .then(data =>{
-                if(data != 'error') {
-                    this.props.loadUser(data);
-                    this.props.onRouteChange('home');
+                if(data === '0001') {
+                    document.getElementById('errorMessage').classList.remove('error');
+                }
+                else if(data === '0002'){
+                    document.getElementById('errorMessage').classList.remove('error');
                 }
                 else{
-                    document.getElementById('errorMessage').classList.remove('error');
+                    this.props.loadUser(data[0]);
+                    this.props.onRouteChange('home');
                 }
             })
     }
